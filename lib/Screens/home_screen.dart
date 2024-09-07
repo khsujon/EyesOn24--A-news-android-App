@@ -13,9 +13,13 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+enum FilterList { bbcNews, foxNews, timesOfIndia, reuters, cnn, espn }
+
 class _HomeScreenState extends State<HomeScreen> {
   NewsViewModel newsViewModel = NewsViewModel();
+  FilterList? selectedMenu;
   final format = DateFormat('MMMM dd, yyyy');
+  String name = 'bbc-news';
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -37,6 +41,54 @@ class _HomeScreenState extends State<HomeScreen> {
             style:
                 GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700),
           ),
+          actions: [
+            PopupMenuButton<FilterList>(
+              initialValue: selectedMenu,
+              icon: Icon(
+                Icons.more_vert_rounded,
+                color: Colors.blue,
+              ),
+              onSelected: (FilterList item) {
+                if (FilterList.bbcNews.name == item.name) {
+                  name = 'bbc-news';
+                }
+                if (FilterList.foxNews.name == item.name) {
+                  name = 'fox-news';
+                }
+                if (FilterList.espn.name == item.name) {
+                  name = 'espn';
+                }
+                if (FilterList.cnn.name == item.name) {
+                  name = 'cnn';
+                }
+                if (FilterList.timesOfIndia.name == item.name) {
+                  name = 'the-times-of-india';
+                }
+                if (FilterList.reuters.name == item.name) {
+                  name = 'reuters';
+                }
+                setState(() {
+                  selectedMenu = item;
+                });
+              },
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<FilterList>>[
+                PopupMenuItem<FilterList>(
+                    value: FilterList.bbcNews, child: Text('BBC News')),
+                PopupMenuItem<FilterList>(
+                    value: FilterList.foxNews, child: Text('Fox News')),
+                PopupMenuItem<FilterList>(
+                    value: FilterList.cnn, child: Text('CNN')),
+                PopupMenuItem<FilterList>(
+                    value: FilterList.timesOfIndia,
+                    child: Text('Times Of India')),
+                PopupMenuItem<FilterList>(
+                    value: FilterList.espn, child: Text('ESPN')),
+                PopupMenuItem<FilterList>(
+                    value: FilterList.reuters, child: Text('Reuters')),
+              ],
+            )
+          ],
           centerTitle: true,
           backgroundColor: Colors.grey.shade100,
         ),
@@ -46,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: height * .55,
               width: width,
               child: FutureBuilder<NewsChannelsHeadlinesModel>(
-                future: newsViewModel.fetchNewsChannelHeadlinesApi(),
+                future: newsViewModel.fetchNewsChannelHeadlinesApi(name),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
