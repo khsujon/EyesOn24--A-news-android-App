@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../view_model/news_view_model.dart';
+import 'news_details_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
@@ -109,77 +110,110 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         DateTime dateTime = DateTime.parse(snapshot
                             .data!.articles![index].publishedAt
                             .toString());
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: height * 0.01),
-                          child: Container(
-                            color: Colors.grey.shade200,
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: CachedNetworkImage(
-                                    imageUrl: snapshot
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewsDetailsScreen(
+                                    image: snapshot
                                         .data!.articles![index].urlToImage
                                         .toString(),
-                                    fit: BoxFit.cover,
-                                    height: height * .18,
-                                    width: width * .3,
-                                    placeholder: (context, url) => Container(
-                                      child: spinKit2,
-                                    ),
-                                    errorWidget: (context, url, error) => Icon(
-                                      Icons.error_outline,
-                                      color: Colors.red,
-                                    ),
+                                    title: snapshot.data!.articles![index].title
+                                        .toString(),
+                                    author: snapshot
+                                        .data!.articles![index].author
+                                        .toString(),
+                                    date: snapshot
+                                        .data!.articles![index].publishedAt
+                                        .toString(),
+                                    source: snapshot
+                                        .data!.articles![index].source!.name
+                                        .toString(),
+                                    description: snapshot
+                                        .data!.articles![index].description
+                                        .toString(),
+                                    content: snapshot
+                                        .data!.articles![index].content
+                                        .toString(),
+                                    url: snapshot.data!.articles![index].url
+                                        .toString(),
                                   ),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  padding: EdgeInsets.only(left: 15),
-                                  height: height * 0.18,
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        snapshot.data!.articles![index].title
-                                            .toString(),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.fade,
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w900,
-                                            color: Colors.blue),
+                                ));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: height * 0.01),
+                            child: Container(
+                              color: Colors.grey.shade200,
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: CachedNetworkImage(
+                                      imageUrl: snapshot
+                                          .data!.articles![index].urlToImage
+                                          .toString(),
+                                      fit: BoxFit.cover,
+                                      height: height * .18,
+                                      width: width * .3,
+                                      placeholder: (context, url) => Container(
+                                        child: spinKit2,
                                       ),
-                                      Spacer(),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              snapshot.data!.articles![index]
-                                                  .source!.name
-                                                  .toString(),
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black87),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              format.format(dateTime),
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black87),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error_outline,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                   ),
-                                ))
-                              ],
+                                  Expanded(
+                                      child: Container(
+                                    padding: EdgeInsets.only(left: 15),
+                                    height: height * 0.18,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          snapshot.data!.articles![index].title
+                                              .toString(),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.fade,
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.blue),
+                                        ),
+                                        Spacer(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                snapshot.data!.articles![index]
+                                                    .source!.name
+                                                    .toString(),
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.black87),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                format.format(dateTime),
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.black87),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ))
+                                ],
+                              ),
                             ),
                           ),
                         );
